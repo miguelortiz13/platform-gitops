@@ -8,4 +8,5 @@ resources:
 
 images:
 - name: acrdevsrelab01.azurecr.io/frontend
-  newTag: sha-10599a0
+  newName: acrdevsrelab01.azurecr.io/frontend
+  newTag: sha-d6d7fb8
