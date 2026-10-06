@@ -1,0 +1,25 @@
+global:
+  domain: argocd.local
+
+configs:
+  params:
+    server.insecure: true
+  cm:
+    timeout.reconciliation: 60s
+    application.resourceTrackingMethod: annotation
+
+server:
+  extraArgs:
+    - --insecure
+  service:
+    type: ClusterIP
+
+controller:
+  replicas: 1
+
+repoServer:
+  replicas: 1
+
+redis:
+  exporter:
+    enabled: false

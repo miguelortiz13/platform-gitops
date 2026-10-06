@@ -52,19 +52,19 @@ jobs:
       - name: Validate Base Application
         run: |
           echo "==> Building and validating apps/online-boutique/base..."
-          kustomize build apps/online-boutique/base | kubeconform -strict -summary
+          kustomize build apps/online-boutique/base | kubeconform -strict -summary -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
 
       - name: Validate Dev Overlay
         run: |
           echo "==> Building and validating apps/online-boutique/overlays/dev..."
-          kustomize build apps/online-boutique/overlays/dev | kubeconform -strict -summary
+          kustomize build apps/online-boutique/overlays/dev | kubeconform -strict -summary -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
 
       - name: Validate Prod Overlay
         run: |
           echo "==> Building and validating apps/online-boutique/overlays/prod..."
-          kustomize build apps/online-boutique/overlays/prod | kubeconform -strict -summary
+          kustomize build apps/online-boutique/overlays/prod | kubeconform -strict -summary -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
 
       - name: Validate Dev Cluster
         run: |
           echo "==> Building and validating clusters/dev..."
-          kustomize build clusters/dev | kubeconform -strict -summary
+          kustomize build clusters/dev | kubeconform -strict -summary -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'

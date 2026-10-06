@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: root-application
+  name: online-boutique
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,10 +10,10 @@ spec:
   source:
     repoURL: https://github.com/miguelortiz13/platform-gitops.git
     targetRevision: main
-    path: clusters/dev
+    path: apps/online-boutique/overlays/dev
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: online-boutique
   syncPolicy:
     automated:
       prune: true
