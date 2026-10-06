@@ -42,7 +42,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: acrdevsrelab01.azurecr.io/shippingservice:latest
+        image: us-central1-docker.pkg.dev/online-boutique-ci/microservices-demo/shippingservice:v0.10.7
         ports:
         - containerPort: 50051
         env:
