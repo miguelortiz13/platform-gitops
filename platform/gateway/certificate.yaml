@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: boutique-tls-cert
+  namespace: online-boutique
+spec:
+  secretName: boutique-tls-cert
+  issuerRef:
+    name: dev-ca-issuer
+    kind: ClusterIssuer
+  dnsNames:
+    - boutique.local
+    - "127.0.0.1.sslip.io"
+    - localhost
