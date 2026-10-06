@@ -68,3 +68,14 @@ jobs:
         run: |
           echo "==> Building and validating clusters/dev..."
           kustomize build clusters/dev | kubeconform -strict -summary -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
+
+      - name: Validate Platform Cert-Manager
+        run: |
+          echo "==> Building and validating platform/cert-manager..."
+          kustomize build platform/cert-manager | kubeconform -strict -summary -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
+
+      - name: Validate Platform Gateway
+        run: |
+          echo "==> Building and validating platform/gateway..."
+          kustomize build platform/gateway | kubeconform -strict -summary -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
+

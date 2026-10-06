@@ -4,3 +4,7 @@ kind: Kustomization
 resources:
   - app-online-boutique.yaml
   - app-argocd.yaml
+  - app-envoy-gateway.yaml
+  - app-cert-manager.yaml
+  - app-platform-cert-manager.yaml
+  - app-platform-gateway.yaml
