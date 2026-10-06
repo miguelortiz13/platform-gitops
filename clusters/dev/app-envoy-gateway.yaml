@@ -15,7 +15,10 @@ spec:
     targetRevision: 1.9.2
     helm:
       releaseName: envoy-gateway
-      ignoreHelmHooks: true
+      valuesObject:
+        certgen:
+          job:
+            ttlSecondsAfterFinished: 600
   destination:
     server: https://kubernetes.default.svc
     namespace: envoy-gateway-system
