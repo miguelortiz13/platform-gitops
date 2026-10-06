@@ -4,9 +4,13 @@ kind: Kustomization
 namespace: online-boutique
 
 resources:
-- ../../base
+  - ../../base
+  - namespace.yaml
+
+patches:
+  - path: patches/dev-resources.yaml
 
 images:
-- name: acrdevsrelab01.azurecr.io/frontend
-  newName: acrdevsrelab01.azurecr.io/frontend
-  newTag: sha-d6d7fb8
+  - name: acrdevsrelab01.azurecr.io/frontend
+    newName: acrdevsrelab01.azurecr.io/frontend
+    newTag: sha-d6d7fb8
