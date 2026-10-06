@@ -1,0 +1,70 @@
+name: GitOps PR Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'apps/**'
+      - 'clusters/**'
+      - 'platform/**'
+      - 'bootstrap/**'
+      - '.github/workflows/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/**'
+      - 'clusters/**'
+      - 'platform/**'
+      - 'bootstrap/**'
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  validate:
+    name: Validate Kustomize Overlays & Manifests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Kustomize
+        run: |
+          if ! command -v kustomize &> /dev/null; then
+            echo "Installing Kustomize..."
+            curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+            sudo mv kustomize /usr/local/bin/
+          fi
+          kustomize version
+
+      - name: Set up Kubeconform
+        run: |
+          echo "Installing Kubeconform..."
+          curl -sL https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz | tar -xz -C /tmp kubeconform
+          sudo mv /tmp/kubeconform /usr/local/bin/
+          kubeconform -v
+
+      - name: Validate Base Application
+        run: |
+          echo "==> Building and validating apps/online-boutique/base..."
+          kustomize build apps/online-boutique/base | kubeconform -strict -summary
+
+      - name: Validate Dev Overlay
+        run: |
+          echo "==> Building and validating apps/online-boutique/overlays/dev..."
+          kustomize build apps/online-boutique/overlays/dev | kubeconform -strict -summary
+
+      - name: Validate Prod Overlay
+        run: |
+          echo "==> Building and validating apps/online-boutique/overlays/prod..."
+          kustomize build apps/online-boutique/overlays/prod | kubeconform -strict -summary
+
+      - name: Validate Dev Cluster
+        run: |
+          echo "==> Building and validating clusters/dev..."
+          kustomize build clusters/dev | kubeconform -strict -summary
