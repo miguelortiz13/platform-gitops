@@ -69,6 +69,16 @@ spec:
             limits:
               cpu: 200m
               memory: 256Mi
+          readinessProbe:
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            grpc:
+              port: 8080
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 15
+            grpc:
+              port: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -83,7 +93,17 @@ spec:
           resources:
             requests:
               cpu: 50m
-              memory: 64Mi
+              memory: 200Mi
             limits:
               cpu: 200m
-              memory: 256Mi
+              memory: 450Mi
+          readinessProbe:
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            grpc:
+              port: 8080
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 15
+            grpc:
+              port: 8080
