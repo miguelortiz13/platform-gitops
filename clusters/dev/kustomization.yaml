@@ -16,3 +16,5 @@ resources:
   - app-platform-observability.yaml
   - app-loki.yaml
   - app-alloy.yaml
+  - app-tempo.yaml
+  - app-opentelemetry-collector.yaml

@@ -9,6 +9,7 @@ resources:
 
 patches:
   - path: patches/dev-resources.yaml
+  - path: patches/tracing.yaml
 
 images:
   - name: us-central1-docker.pkg.dev/online-boutique-ci/microservices-demo/frontend

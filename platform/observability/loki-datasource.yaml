@@ -13,6 +13,12 @@ data:
         type: loki
         access: proxy
         url: http://loki.monitoring.svc:3100
+        uid: loki
         isDefault: false
         jsonData:
           maxLines: 1000
+          derivedFields:
+            - datasourceUid: tempo
+              matcherRegex: '(?:trace_id|traceId|traceparent)=([0-9a-fA-F]{32})'
+              name: TraceID
+              url: '$${__value.raw}'

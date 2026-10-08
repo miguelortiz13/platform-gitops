@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - external-secret-grafana.yaml
   - loki-datasource.yaml
+  - tempo-datasource.yaml
