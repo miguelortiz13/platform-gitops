@@ -14,3 +14,5 @@ resources:
   - app-platform-argo-rollouts.yaml
   - app-kube-prometheus-stack.yaml
   - app-platform-observability.yaml
+  - app-loki.yaml
+  - app-alloy.yaml
