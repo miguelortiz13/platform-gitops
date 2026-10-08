@@ -10,3 +10,5 @@ resources:
   - app-platform-gateway.yaml
   - app-external-secrets.yaml
   - app-platform-external-secrets.yaml
+  - app-argo-rollouts.yaml
+  - app-platform-argo-rollouts.yaml
