@@ -12,3 +12,5 @@ resources:
   - app-platform-external-secrets.yaml
   - app-argo-rollouts.yaml
   - app-platform-argo-rollouts.yaml
+  - app-kube-prometheus-stack.yaml
+  - app-platform-observability.yaml

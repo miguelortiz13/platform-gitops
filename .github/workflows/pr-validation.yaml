@@ -89,3 +89,8 @@ jobs:
           echo "==> Building and validating platform/argo-rollouts..."
           kustomize build platform/argo-rollouts | kubeconform -strict -summary -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
 
+      - name: Validate Platform Observability
+        run: |
+          echo "==> Building and validating platform/observability..."
+          kustomize build platform/observability | kubeconform -strict -summary -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
+
