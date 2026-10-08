@@ -79,3 +79,8 @@ jobs:
           echo "==> Building and validating platform/gateway..."
           kustomize build platform/gateway | kubeconform -strict -summary -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
 
+      - name: Validate Platform External-Secrets
+        run: |
+          echo "==> Building and validating platform/external-secrets..."
+          kustomize build platform/external-secrets | kubeconform -strict -summary -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
+

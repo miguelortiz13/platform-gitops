@@ -1,5 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-resources: []
-# SecretStore y ExternalSecrets sincronizados desde Azure Key Vault se incorporan en P3-05
+resources:
+  - cluster-secret-store.yaml
+  - external-secret-sample.yaml
