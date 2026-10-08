@@ -16,3 +16,11 @@ Mediante la etiqueta `grafana_datasource: "1"`, el sidecar de Grafana detecta y 
   * `tracesToLogsV2`: Permite saltar desde cualquier span hacia los logs asociados en Loki.
   * `tracesToMetrics`: Permite saltar desde un span hacia las métricas de latencia y tasa de peticiones en Prometheus.
   * `nodeGraph`: Visualización interactiva del grafo de dependencias entre servicios.
+
+---
+
+## 3. Aprovisionamiento Declarativo de Dashboards (Sidecar Pattern)
+Mediante la etiqueta `grafana_dashboard: "1"`, el sidecar de Grafana carga automáticamente los tableros JSON como código:
+* **`dashboard-services-red.yaml`:** Tablero basado en el **Método RED** (Rate, Errors, Duration) para Online Boutique con selector dinámico de microservicio (`$service`).
+* **`dashboard-nodes-use.yaml`:** Tablero basado en el **Método USE** (Utilization, Saturation, Errors) para los nodos del clúster con selector dinámico (`$node`).
+* **Resiliencia:** Si Grafana es borrado o reiniciado, los tableros se reimportan de forma totalmente desatendida.
