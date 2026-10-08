@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasource-tempo
+  namespace: monitoring
+  labels:
+    grafana_datasource: "1"
+data:
+  tempo-datasource.yaml: |-
+    apiVersion: 1
+    datasources:
+      - name: Tempo
+        type: tempo
+        access: proxy
+        url: http://tempo.monitoring.svc:3200
+        uid: tempo
+        isDefault: false
+        jsonData:
+          httpMethod: GET
+          nodeGraph:
+            enabled: true
+          search:
+            hide: false
+          tracesToLogsV2:
+            datasourceUid: 'loki'
+            spanStartTimeShift: '-2m'
+            spanEndTimeShift: '2m'
+            filterByTraceId: true
+            filterBySpanId: false
+            customQuery: true
+            query: '{app=~"$${__tags.app}"} |= "$${__trace.id}"'
+            tags: ['app', 'pod', 'service.name']
+          tracesToMetrics:
+            datasourceUid: 'prometheus'
+            spanStartTimeShift: '-2m'
+            spanEndTimeShift: '2m'
+            tags: [{ key: 'service.name', value: 'service' }, { key: 'app' }]
+            queries:
+              - name: 'Latencia p95 por servicio'
+                query: 'histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{$$__tags}[5m])) by (le))'
