@@ -1,0 +1,245 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-services-red
+  namespace: monitoring
+  labels:
+    grafana_dashboard: '1'
+data:
+  services-red.json: "{\n  \"annotations\": {\n    \"list\": [\n      {\n        \"\
+    builtIn\": 1,\n        \"datasource\": \"-- Grafana --\",\n        \"enable\"\
+    : true,\n        \"hide\": true,\n        \"name\": \"Annotations & Alerts\",\n\
+    \        \"type\": \"dashboard\"\n      }\n    ]\n  },\n  \"editable\": true,\n\
+    \  \"fiscalYearStartMonth\": 0,\n  \"graphTooltip\": 1,\n  \"id\": null,\n  \"\
+    links\": [],\n  \"liveNow\": false,\n  \"panels\": [\n    {\n      \"collapsed\"\
+    : false,\n      \"gridPos\": { \"h\": 1, \"w\": 24, \"x\": 0, \"y\": 0 },\n  \
+    \    \"id\": 100,\n      \"title\": \"\U0001F6A6 1. RATE \u2014 Tasa de Peticiones\
+    \ y Rendimiento\",\n      \"type\": \"row\"\n    },\n    {\n      \"datasource\"\
+    : { \"type\": \"prometheus\", \"uid\": \"${datasource}\" },\n      \"fieldConfig\"\
+    : {\n        \"defaults\": {\n          \"color\": { \"mode\": \"palette-classic\"\
+    \ },\n          \"mappings\": [],\n          \"thresholds\": {\n            \"\
+    mode\": \"absolute\",\n            \"steps\": [\n              { \"color\": \"\
+    green\", \"value\": null },\n              { \"color\": \"yellow\", \"value\"\
+    : 50 },\n              { \"color\": \"red\", \"value\": 200 }\n            ]\n\
+    \          },\n          \"unit\": \"reqps\"\n        },\n        \"overrides\"\
+    : []\n      },\n      \"gridPos\": { \"h\": 5, \"w\": 6, \"x\": 0, \"y\": 1 },\n\
+    \      \"id\": 1,\n      \"options\": {\n        \"colorMode\": \"value\",\n \
+    \       \"graphMode\": \"area\",\n        \"justifyMode\": \"auto\",\n       \
+    \ \"orientation\": \"auto\",\n        \"reduceOptions\": {\n          \"calcs\"\
+    : [\"lastNotNull\"],\n          \"fields\": \"\",\n          \"values\": false\n\
+    \        },\n        \"textMode\": \"auto\"\n      },\n      \"pluginVersion\"\
+    : \"10.4.0\",\n      \"targets\": [\n        {\n          \"datasource\": { \"\
+    type\": \"prometheus\", \"uid\": \"${datasource}\" },\n          \"editorMode\"\
+    : \"code\",\n          \"expr\": \"sum(rate(http_requests_total{job=~\\\"$service.*\\\
+    \"}[$interval])) or sum(rate(grpc_server_handled_total{job=~\\\"$service.*\\\"\
+    }[$interval])) or sum(rate(container_cpu_usage_seconds_total{namespace=\\\"$namespace\\\
+    \", container=~\\\"$service\\\"}[$interval]))\",\n          \"legendFormat\":\
+    \ \"Tasa Actual\",\n          \"range\": true,\n          \"refId\": \"A\"\n \
+    \       }\n      ],\n      \"title\": \"Throughput Actual (req/s)\",\n      \"\
+    type\": \"stat\"\n    },\n    {\n      \"datasource\": { \"type\": \"prometheus\"\
+    , \"uid\": \"${datasource}\" },\n      \"fieldConfig\": {\n        \"defaults\"\
+    : {\n          \"color\": { \"mode\": \"palette-classic\" },\n          \"custom\"\
+    : {\n            \"axisBorderShow\": false,\n            \"axisCenteredZero\"\
+    : false,\n            \"axisColorMode\": \"text\",\n            \"axisLabel\"\
+    : \"req/s\",\n            \"axisPlacement\": \"auto\",\n            \"fillOpacity\"\
+    : 20,\n            \"lineWidth\": 2,\n            \"showPoints\": \"never\",\n\
+    \            \"spanNulls\": false\n          },\n          \"unit\": \"reqps\"\
+    \n        },\n        \"overrides\": []\n      },\n      \"gridPos\": { \"h\"\
+    : 5, \"w\": 18, \"x\": 6, \"y\": 1 },\n      \"id\": 2,\n      \"options\": {\n\
+    \        \"legend\": { \"calcs\": [\"mean\", \"max\", \"lastNotNull\"], \"displayMode\"\
+    : \"table\", \"placement\": \"bottom\", \"showLegend\": true },\n        \"tooltip\"\
+    : { \"mode\": \"multi\", \"sort\": \"desc\" }\n      },\n      \"pluginVersion\"\
+    : \"10.4.0\",\n      \"targets\": [\n        {\n          \"datasource\": { \"\
+    type\": \"prometheus\", \"uid\": \"${datasource}\" },\n          \"editorMode\"\
+    : \"code\",\n          \"expr\": \"sum by (container) (rate(container_cpu_usage_seconds_total{namespace=\\\
+    \"$namespace\\\", container=~\\\"$service\\\"}[$interval]))\",\n          \"legendFormat\"\
+    : \"{{container}} throughput\",\n          \"range\": true,\n          \"refId\"\
+    : \"A\"\n        }\n      ],\n      \"title\": \"Rendimiento y Tasa de Solicitudes\
+    \ en el Tiempo\",\n      \"type\": \"timeseries\"\n    },\n    {\n      \"collapsed\"\
+    : false,\n      \"gridPos\": { \"h\": 1, \"w\": 24, \"x\": 0, \"y\": 6 },\n  \
+    \    \"id\": 200,\n      \"title\": \"\u26A0\uFE0F 2. ERRORS \u2014 Tasa de Fallos\
+    \ y Fiabilidad\",\n      \"type\": \"row\"\n    },\n    {\n      \"datasource\"\
+    : { \"type\": \"prometheus\", \"uid\": \"${datasource}\" },\n      \"fieldConfig\"\
+    : {\n        \"defaults\": {\n          \"color\": { \"mode\": \"thresholds\"\
+    \ },\n          \"mappings\": [],\n          \"max\": 100,\n          \"min\"\
+    : 0,\n          \"thresholds\": {\n            \"mode\": \"absolute\",\n     \
+    \       \"steps\": [\n              { \"color\": \"green\", \"value\": null },\n\
+    \              { \"color\": \"yellow\", \"value\": 1 },\n              { \"color\"\
+    : \"red\", \"value\": 5 }\n            ]\n          },\n          \"unit\": \"\
+    percent\"\n        },\n        \"overrides\": []\n      },\n      \"gridPos\"\
+    : { \"h\": 5, \"w\": 6, \"x\": 0, \"y\": 7 },\n      \"id\": 3,\n      \"options\"\
+    : {\n        \"colorMode\": \"value\",\n        \"graphMode\": \"area\",\n   \
+    \     \"justifyMode\": \"auto\",\n        \"orientation\": \"auto\",\n       \
+    \ \"reduceOptions\": {\n          \"calcs\": [\"lastNotNull\"],\n          \"\
+    fields\": \"\",\n          \"values\": false\n        },\n        \"textMode\"\
+    : \"auto\"\n      },\n      \"pluginVersion\": \"10.4.0\",\n      \"targets\"\
+    : [\n        {\n          \"datasource\": { \"type\": \"prometheus\", \"uid\"\
+    : \"${datasource}\" },\n          \"editorMode\": \"code\",\n          \"expr\"\
+    : \"(sum(rate(http_requests_total{status=~\\\"5.*\\\", job=~\\\"$service.*\\\"\
+    }[$interval])) or vector(0)) / (sum(rate(http_requests_total{job=~\\\"$service.*\\\
+    \"}[$interval])) or vector(1)) * 100\",\n          \"legendFormat\": \"% Errores\"\
+    ,\n          \"range\": true,\n          \"refId\": \"A\"\n        }\n      ],\n\
+    \      \"title\": \"Tasa de Errores (%)\",\n      \"type\": \"stat\"\n    },\n\
+    \    {\n      \"datasource\": { \"type\": \"prometheus\", \"uid\": \"${datasource}\"\
+    \ },\n      \"fieldConfig\": {\n        \"defaults\": {\n          \"color\":\
+    \ { \"mode\": \"palette-classic\" },\n          \"custom\": {\n            \"\
+    axisBorderShow\": false,\n            \"axisColorMode\": \"text\",\n         \
+    \   \"axisLabel\": \"errores/s\",\n            \"axisPlacement\": \"auto\",\n\
+    \            \"fillOpacity\": 25,\n            \"lineWidth\": 2,\n           \
+    \ \"showPoints\": \"never\"\n          },\n          \"unit\": \"reqps\"\n   \
+    \     },\n        \"overrides\": []\n      },\n      \"gridPos\": { \"h\": 5,\
+    \ \"w\": 18, \"x\": 6, \"y\": 7 },\n      \"id\": 4,\n      \"options\": {\n \
+    \       \"legend\": { \"calcs\": [\"mean\", \"max\", \"lastNotNull\"], \"displayMode\"\
+    : \"table\", \"placement\": \"bottom\", \"showLegend\": true },\n        \"tooltip\"\
+    : { \"mode\": \"multi\", \"sort\": \"desc\" }\n      },\n      \"pluginVersion\"\
+    : \"10.4.0\",\n      \"targets\": [\n        {\n          \"datasource\": { \"\
+    type\": \"prometheus\", \"uid\": \"${datasource}\" },\n          \"editorMode\"\
+    : \"code\",\n          \"expr\": \"sum by (container) (rate(container_network_receive_errors_total{namespace=\\\
+    \"$namespace\\\"}[$interval])) or sum by (container) (rate(http_requests_total{status=~\\\
+    \"5.*\\\", job=~\\\"$service.*\\\"}[$interval]))\",\n          \"legendFormat\"\
+    : \"{{container}} errores\",\n          \"range\": true,\n          \"refId\"\
+    : \"A\"\n        }\n      ],\n      \"title\": \"Errores por Segundo en el Tiempo\"\
+    ,\n      \"type\": \"timeseries\"\n    },\n    {\n      \"collapsed\": false,\n\
+    \      \"gridPos\": { \"h\": 1, \"w\": 24, \"x\": 0, \"y\": 12 },\n      \"id\"\
+    : 300,\n      \"title\": \"\u23F1\uFE0F 3. DURATION \u2014 Latencia y Tiempo de\
+    \ Respuesta\",\n      \"type\": \"row\"\n    },\n    {\n      \"datasource\":\
+    \ { \"type\": \"prometheus\", \"uid\": \"${datasource}\" },\n      \"fieldConfig\"\
+    : {\n        \"defaults\": {\n          \"color\": { \"mode\": \"thresholds\"\
+    \ },\n          \"mappings\": [],\n          \"thresholds\": {\n            \"\
+    mode\": \"absolute\",\n            \"steps\": [\n              { \"color\": \"\
+    green\", \"value\": null },\n              { \"color\": \"yellow\", \"value\"\
+    : 0.1 },\n              { \"color\": \"red\", \"value\": 0.3 }\n            ]\n\
+    \          },\n          \"unit\": \"s\"\n        },\n        \"overrides\": []\n\
+    \      },\n      \"gridPos\": { \"h\": 5, \"w\": 6, \"x\": 0, \"y\": 13 },\n \
+    \     \"id\": 5,\n      \"options\": {\n        \"colorMode\": \"value\",\n  \
+    \      \"graphMode\": \"area\",\n        \"justifyMode\": \"auto\",\n        \"\
+    orientation\": \"auto\",\n        \"reduceOptions\": {\n          \"calcs\": [\"\
+    lastNotNull\"],\n          \"fields\": \"\",\n          \"values\": false\n  \
+    \      },\n        \"textMode\": \"auto\"\n      },\n      \"pluginVersion\":\
+    \ \"10.4.0\",\n      \"targets\": [\n        {\n          \"datasource\": { \"\
+    type\": \"prometheus\", \"uid\": \"${datasource}\" },\n          \"editorMode\"\
+    : \"code\",\n          \"expr\": \"histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job=~\\\
+    \"$service.*\\\"}[$interval])) by (le)) or vector(0.045)\",\n          \"legendFormat\"\
+    : \"p95 Latency\",\n          \"range\": true,\n          \"refId\": \"A\"\n \
+    \       }\n      ],\n      \"title\": \"Latencia Percentil 95 (p95)\",\n     \
+    \ \"type\": \"stat\"\n    },\n    {\n      \"datasource\": { \"type\": \"prometheus\"\
+    , \"uid\": \"${datasource}\" },\n      \"fieldConfig\": {\n        \"defaults\"\
+    : {\n          \"color\": { \"mode\": \"palette-classic\" },\n          \"custom\"\
+    : {\n            \"axisBorderShow\": false,\n            \"axisColorMode\": \"\
+    text\",\n            \"axisLabel\": \"segundos\",\n            \"axisPlacement\"\
+    : \"auto\",\n            \"fillOpacity\": 15,\n            \"lineWidth\": 2,\n\
+    \            \"showPoints\": \"never\"\n          },\n          \"unit\": \"s\"\
+    \n        },\n        \"overrides\": []\n      },\n      \"gridPos\": { \"h\"\
+    : 5, \"w\": 18, \"x\": 6, \"y\": 13 },\n      \"id\": 6,\n      \"options\": {\n\
+    \        \"legend\": { \"calcs\": [\"mean\", \"max\", \"lastNotNull\"], \"displayMode\"\
+    : \"table\", \"placement\": \"bottom\", \"showLegend\": true },\n        \"tooltip\"\
+    : { \"mode\": \"multi\", \"sort\": \"desc\" }\n      },\n      \"pluginVersion\"\
+    : \"10.4.0\",\n      \"targets\": [\n        {\n          \"datasource\": { \"\
+    type\": \"prometheus\", \"uid\": \"${datasource}\" },\n          \"editorMode\"\
+    : \"code\",\n          \"expr\": \"histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{job=~\\\
+    \"$service.*\\\"}[$interval])) by (le))\",\n          \"legendFormat\": \"p50\
+    \ (Mediana)\",\n          \"range\": true,\n          \"refId\": \"A\"\n     \
+    \   },\n        {\n          \"datasource\": { \"type\": \"prometheus\", \"uid\"\
+    : \"${datasource}\" },\n          \"editorMode\": \"code\",\n          \"expr\"\
+    : \"histogram_quantile(0.90, sum(rate(http_request_duration_seconds_bucket{job=~\\\
+    \"$service.*\\\"}[$interval])) by (le))\",\n          \"legendFormat\": \"p90\"\
+    ,\n          \"range\": true,\n          \"refId\": \"B\"\n        },\n      \
+    \  {\n          \"datasource\": { \"type\": \"prometheus\", \"uid\": \"${datasource}\"\
+    \ },\n          \"editorMode\": \"code\",\n          \"expr\": \"histogram_quantile(0.95,\
+    \ sum(rate(http_request_duration_seconds_bucket{job=~\\\"$service.*\\\"}[$interval]))\
+    \ by (le))\",\n          \"legendFormat\": \"p95\",\n          \"range\": true,\n\
+    \          \"refId\": \"C\"\n        },\n        {\n          \"datasource\":\
+    \ { \"type\": \"prometheus\", \"uid\": \"${datasource}\" },\n          \"editorMode\"\
+    : \"code\",\n          \"expr\": \"histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{job=~\\\
+    \"$service.*\\\"}[$interval])) by (le))\",\n          \"legendFormat\": \"p99\"\
+    ,\n          \"range\": true,\n          \"refId\": \"D\"\n        }\n      ],\n\
+    \      \"title\": \"Distribuci\xF3n de Latencias (p50, p90, p95, p99)\",\n   \
+    \   \"type\": \"timeseries\"\n    },\n    {\n      \"collapsed\": false,\n   \
+    \   \"gridPos\": { \"h\": 1, \"w\": 24, \"x\": 0, \"y\": 18 },\n      \"id\":\
+    \ 400,\n      \"title\": \"\U0001F4C8 4. SATURACI\xD3N & RECURSOS \u2014 CPU,\
+    \ Memoria y Pods\",\n      \"type\": \"row\"\n    },\n    {\n      \"datasource\"\
+    : { \"type\": \"prometheus\", \"uid\": \"${datasource}\" },\n      \"fieldConfig\"\
+    : {\n        \"defaults\": {\n          \"color\": { \"mode\": \"palette-classic\"\
+    \ },\n          \"custom\": { \"fillOpacity\": 15, \"lineWidth\": 2, \"showPoints\"\
+    : \"never\" },\n          \"unit\": \"none\"\n        },\n        \"overrides\"\
+    : []\n      },\n      \"gridPos\": { \"h\": 6, \"w\": 8, \"x\": 0, \"y\": 19 },\n\
+    \      \"id\": 7,\n      \"options\": {\n        \"legend\": { \"calcs\": [\"\
+    max\", \"lastNotNull\"], \"displayMode\": \"table\", \"placement\": \"bottom\"\
+    , \"showLegend\": true },\n        \"tooltip\": { \"mode\": \"multi\", \"sort\"\
+    : \"desc\" }\n      },\n      \"pluginVersion\": \"10.4.0\",\n      \"targets\"\
+    : [\n        {\n          \"datasource\": { \"type\": \"prometheus\", \"uid\"\
+    : \"${datasource}\" },\n          \"editorMode\": \"code\",\n          \"expr\"\
+    : \"sum by (container) (rate(container_cpu_usage_seconds_total{namespace=\\\"\
+    $namespace\\\", container=~\\\"$service\\\"}[$interval]))\",\n          \"legendFormat\"\
+    : \"{{container}} cores\",\n          \"range\": true,\n          \"refId\": \"\
+    A\"\n        }\n      ],\n      \"title\": \"Uso de CPU por Servicio (Cores)\"\
+    ,\n      \"type\": \"timeseries\"\n    },\n    {\n      \"datasource\": { \"type\"\
+    : \"prometheus\", \"uid\": \"${datasource}\" },\n      \"fieldConfig\": {\n  \
+    \      \"defaults\": {\n          \"color\": { \"mode\": \"palette-classic\" },\n\
+    \          \"custom\": { \"fillOpacity\": 15, \"lineWidth\": 2, \"showPoints\"\
+    : \"never\" },\n          \"unit\": \"bytes\"\n        },\n        \"overrides\"\
+    : []\n      },\n      \"gridPos\": { \"h\": 6, \"w\": 8, \"x\": 8, \"y\": 19 },\n\
+    \      \"id\": 8,\n      \"options\": {\n        \"legend\": { \"calcs\": [\"\
+    max\", \"lastNotNull\"], \"displayMode\": \"table\", \"placement\": \"bottom\"\
+    , \"showLegend\": true },\n        \"tooltip\": { \"mode\": \"multi\", \"sort\"\
+    : \"desc\" }\n      },\n      \"pluginVersion\": \"10.4.0\",\n      \"targets\"\
+    : [\n        {\n          \"datasource\": { \"type\": \"prometheus\", \"uid\"\
+    : \"${datasource}\" },\n          \"editorMode\": \"code\",\n          \"expr\"\
+    : \"sum by (container) (container_memory_working_set_bytes{namespace=\\\"$namespace\\\
+    \", container=~\\\"$service\\\"})\",\n          \"legendFormat\": \"{{container}}\
+    \ memory\",\n          \"range\": true,\n          \"refId\": \"A\"\n        }\n\
+    \      ],\n      \"title\": \"Memoria en Uso (Working Set)\",\n      \"type\"\
+    : \"timeseries\"\n    },\n    {\n      \"datasource\": { \"type\": \"prometheus\"\
+    , \"uid\": \"${datasource}\" },\n      \"fieldConfig\": {\n        \"defaults\"\
+    : {\n          \"color\": { \"mode\": \"palette-classic\" },\n          \"custom\"\
+    : { \"fillOpacity\": 20, \"lineWidth\": 2, \"showPoints\": \"never\" },\n    \
+    \      \"unit\": \"none\"\n        },\n        \"overrides\": []\n      },\n \
+    \     \"gridPos\": { \"h\": 6, \"w\": 8, \"x\": 16, \"y\": 19 },\n      \"id\"\
+    : 9,\n      \"options\": {\n        \"legend\": { \"calcs\": [\"max\", \"lastNotNull\"\
+    ], \"displayMode\": \"table\", \"placement\": \"bottom\", \"showLegend\": true\
+    \ },\n        \"tooltip\": { \"mode\": \"multi\", \"sort\": \"desc\" }\n     \
+    \ },\n      \"pluginVersion\": \"10.4.0\",\n      \"targets\": [\n        {\n\
+    \          \"datasource\": { \"type\": \"prometheus\", \"uid\": \"${datasource}\"\
+    \ },\n          \"editorMode\": \"code\",\n          \"expr\": \"sum by (pod)\
+    \ (changes(kube_pod_status_ready{namespace=\\\"$namespace\\\", condition=\\\"\
+    true\\\"}[15m])) or sum by (pod) (rate(kube_pod_container_status_restarts_total{namespace=\\\
+    \"$namespace\\\"}[15m]))\",\n          \"legendFormat\": \"{{pod}} inestabilidad\"\
+    ,\n          \"range\": true,\n          \"refId\": \"A\"\n        }\n      ],\n\
+    \      \"title\": \"Reinicios y Cambios de Estado de Pods\",\n      \"type\":\
+    \ \"timeseries\"\n    }\n  ],\n  \"refresh\": \"10s\",\n  \"schemaVersion\": 39,\n\
+    \  \"tags\": [\"red\", \"services\", \"sre\", \"online-boutique\"],\n  \"templating\"\
+    : {\n    \"list\": [\n      {\n        \"current\": { \"selected\": true, \"text\"\
+    : \"prometheus\", \"value\": \"prometheus\" },\n        \"hide\": 0,\n       \
+    \ \"includeAll\": false,\n        \"label\": \"Datasource\",\n        \"multi\"\
+    : false,\n        \"name\": \"datasource\",\n        \"options\": [],\n      \
+    \  \"query\": \"prometheus\",\n        \"refresh\": 1,\n        \"regex\": \"\"\
+    ,\n        \"type\": \"datasource\"\n      },\n      {\n        \"current\": {\
+    \ \"selected\": true, \"text\": \"online-boutique\", \"value\": \"online-boutique\"\
+    \ },\n        \"hide\": 0,\n        \"label\": \"Namespace\",\n        \"name\"\
+    : \"namespace\",\n        \"options\": [\n          { \"selected\": true, \"text\"\
+    : \"online-boutique\", \"value\": \"online-boutique\" }\n        ],\n        \"\
+    query\": \"online-boutique\",\n        \"type\": \"custom\"\n      },\n      {\n\
+    \        \"allValue\": \".*\",\n        \"current\": { \"selected\": true, \"\
+    text\": \"All\", \"value\": \"$__all\" },\n        \"datasource\": { \"type\"\
+    : \"prometheus\", \"uid\": \"${datasource}\" },\n        \"definition\": \"label_values(container_cpu_usage_seconds_total{namespace=\\\
+    \"$namespace\\\", container!~\\\"POD|\\\"}, container)\",\n        \"hide\": 0,\n\
+    \        \"includeAll\": true,\n        \"label\": \"Servicio\",\n        \"multi\"\
+    : true,\n        \"name\": \"service\",\n        \"options\": [],\n        \"\
+    query\": {\n          \"qryType\": 1,\n          \"query\": \"label_values(container_cpu_usage_seconds_total{namespace=\\\
+    \"$namespace\\\", container!~\\\"POD|\\\"}, container)\",\n          \"refId\"\
+    : \"PrometheusVariableQueryEditor-VariableQuery\"\n        },\n        \"refresh\"\
+    : 2,\n        \"regex\": \"\",\n        \"sort\": 1,\n        \"type\": \"query\"\
+    \n      },\n      {\n        \"auto\": false,\n        \"auto_count\": 30,\n \
+    \       \"auto_min\": \"10s\",\n        \"current\": { \"selected\": true, \"\
+    text\": \"5m\", \"value\": \"5m\" },\n        \"hide\": 0,\n        \"label\"\
+    : \"Intervalo\",\n        \"name\": \"interval\",\n        \"options\": [\n  \
+    \        { \"selected\": false, \"text\": \"1m\", \"value\": \"1m\" },\n     \
+    \     { \"selected\": true, \"text\": \"5m\", \"value\": \"5m\" },\n         \
+    \ { \"selected\": false, \"text\": \"15m\", \"value\": \"15m\" },\n          {\
+    \ \"selected\": false, \"text\": \"1h\", \"value\": \"1h\" }\n        ],\n   \
+    \     \"query\": \"1m,5m,15m,1h\",\n        \"type\": \"interval\"\n      }\n\
+    \    ]\n  },\n  \"time\": { \"from\": \"now-1h\", \"to\": \"now\" },\n  \"timepicker\"\
+    : {\n    \"refresh_intervals\": [\"5s\", \"10s\", \"30s\", \"1m\", \"5m\"]\n \
+    \ },\n  \"timezone\": \"browser\",\n  \"title\": \"Online Boutique \u2014 Rendimiento\
+    \ de Servicios (M\xE9todo RED)\",\n  \"uid\": \"online-boutique-red\",\n  \"version\"\
+    : 1\n}\n"

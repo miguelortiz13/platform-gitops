@@ -5,3 +5,5 @@ resources:
   - external-secret-grafana.yaml
   - loki-datasource.yaml
   - tempo-datasource.yaml
+  - dashboard-services-red.yaml
+  - dashboard-nodes-use.yaml

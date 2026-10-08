@@ -1,0 +1,306 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-nodes-use
+  namespace: monitoring
+  labels:
+    grafana_dashboard: '1'
+data:
+  nodes-use.json: "{\n  \"annotations\": {\n    \"list\": [\n      {\n        \"builtIn\"\
+    : 1,\n        \"datasource\": \"-- Grafana --\",\n        \"enable\": true,\n\
+    \        \"hide\": true,\n        \"name\": \"Annotations & Alerts\",\n      \
+    \  \"type\": \"dashboard\"\n      }\n    ]\n  },\n  \"editable\": true,\n  \"\
+    fiscalYearStartMonth\": 0,\n  \"graphTooltip\": 1,\n  \"id\": null,\n  \"links\"\
+    : [],\n  \"liveNow\": false,\n  \"panels\": [\n    {\n      \"collapsed\": false,\n\
+    \      \"gridPos\": { \"h\": 1, \"w\": 24, \"x\": 0, \"y\": 0 },\n      \"id\"\
+    : 100,\n      \"title\": \"\u26A1 1. CPU \u2014 Utilizaci\xF3n y Saturaci\xF3\
+    n\",\n      \"type\": \"row\"\n    },\n    {\n      \"datasource\": { \"type\"\
+    : \"prometheus\", \"uid\": \"${datasource}\" },\n      \"fieldConfig\": {\n  \
+    \      \"defaults\": {\n          \"color\": { \"mode\": \"thresholds\" },\n \
+    \         \"mappings\": [],\n          \"max\": 100,\n          \"min\": 0,\n\
+    \          \"thresholds\": {\n            \"mode\": \"absolute\",\n          \
+    \  \"steps\": [\n              { \"color\": \"green\", \"value\": null },\n  \
+    \            { \"color\": \"yellow\", \"value\": 70 },\n              { \"color\"\
+    : \"red\", \"value\": 85 }\n            ]\n          },\n          \"unit\": \"\
+    percent\"\n        },\n        \"overrides\": []\n      },\n      \"gridPos\"\
+    : { \"h\": 5, \"w\": 6, \"x\": 0, \"y\": 1 },\n      \"id\": 1,\n      \"options\"\
+    : {\n        \"colorMode\": \"value\",\n        \"graphMode\": \"area\",\n   \
+    \     \"justifyMode\": \"auto\",\n        \"orientation\": \"auto\",\n       \
+    \ \"reduceOptions\": {\n          \"calcs\": [\"lastNotNull\"],\n          \"\
+    fields\": \"\",\n          \"values\": false\n        },\n        \"textMode\"\
+    : \"auto\"\n      },\n      \"pluginVersion\": \"10.4.0\",\n      \"targets\"\
+    : [\n        {\n          \"datasource\": { \"type\": \"prometheus\", \"uid\"\
+    : \"${datasource}\" },\n          \"editorMode\": \"code\",\n          \"expr\"\
+    : \"100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\\\"idle\\\", instance=~\\\
+    \"$node\\\"}[$interval])) * 100)\",\n          \"legendFormat\": \"{{instance}}\
+    \ Utilizaci\xF3n\",\n          \"range\": true,\n          \"refId\": \"A\"\n\
+    \        }\n      ],\n      \"title\": \"Utilizaci\xF3n de CPU (%)\",\n      \"\
+    type\": \"stat\"\n    },\n    {\n      \"datasource\": { \"type\": \"prometheus\"\
+    , \"uid\": \"${datasource}\" },\n      \"fieldConfig\": {\n        \"defaults\"\
+    : {\n          \"color\": { \"mode\": \"thresholds\" },\n          \"mappings\"\
+    : [],\n          \"thresholds\": {\n            \"mode\": \"absolute\",\n    \
+    \        \"steps\": [\n              { \"color\": \"green\", \"value\": null },\n\
+    \              { \"color\": \"yellow\", \"value\": 1.0 },\n              { \"\
+    color\": \"red\", \"value\": 2.0 }\n            ]\n          },\n          \"\
+    unit\": \"none\"\n        },\n        \"overrides\": []\n      },\n      \"gridPos\"\
+    : { \"h\": 5, \"w\": 6, \"x\": 6, \"y\": 1 },\n      \"id\": 2,\n      \"options\"\
+    : {\n        \"colorMode\": \"value\",\n        \"graphMode\": \"area\",\n   \
+    \     \"justifyMode\": \"auto\",\n        \"orientation\": \"auto\",\n       \
+    \ \"reduceOptions\": {\n          \"calcs\": [\"lastNotNull\"],\n          \"\
+    fields\": \"\",\n          \"values\": false\n        },\n        \"textMode\"\
+    : \"auto\"\n      },\n      \"pluginVersion\": \"10.4.0\",\n      \"targets\"\
+    : [\n        {\n          \"datasource\": { \"type\": \"prometheus\", \"uid\"\
+    : \"${datasource}\" },\n          \"editorMode\": \"code\",\n          \"expr\"\
+    : \"node_load1{instance=~\\\"$node\\\"} / count without (cpu, mode) (node_cpu_seconds_total{mode=\\\
+    \"idle\\\", instance=~\\\"$node\\\"})\",\n          \"legendFormat\": \"{{instance}}\
+    \ Saturaci\xF3n Load/Core\",\n          \"range\": true,\n          \"refId\"\
+    : \"A\"\n        }\n      ],\n      \"title\": \"Saturaci\xF3n CPU (Load 1m /\
+    \ Cores)\",\n      \"type\": \"stat\"\n    },\n    {\n      \"datasource\": {\
+    \ \"type\": \"prometheus\", \"uid\": \"${datasource}\" },\n      \"fieldConfig\"\
+    : {\n        \"defaults\": {\n          \"color\": { \"mode\": \"palette-classic\"\
+    \ },\n          \"custom\": {\n            \"axisBorderShow\": false,\n      \
+    \      \"axisColorMode\": \"text\",\n            \"axisLabel\": \"%\",\n     \
+    \       \"axisPlacement\": \"auto\",\n            \"fillOpacity\": 20,\n     \
+    \       \"lineWidth\": 2,\n            \"showPoints\": \"never\",\n          \
+    \  \"stacking\": { \"group\": \"A\", \"mode\": \"normal\" }\n          },\n  \
+    \        \"max\": 100,\n          \"min\": 0,\n          \"unit\": \"percent\"\
+    \n        },\n        \"overrides\": []\n      },\n      \"gridPos\": { \"h\"\
+    : 5, \"w\": 12, \"x\": 12, \"y\": 1 },\n      \"id\": 3,\n      \"options\": {\n\
+    \        \"legend\": { \"calcs\": [\"mean\", \"lastNotNull\"], \"displayMode\"\
+    : \"table\", \"placement\": \"bottom\", \"showLegend\": true },\n        \"tooltip\"\
+    : { \"mode\": \"multi\", \"sort\": \"desc\" }\n      },\n      \"pluginVersion\"\
+    : \"10.4.0\",\n      \"targets\": [\n        {\n          \"datasource\": { \"\
+    type\": \"prometheus\", \"uid\": \"${datasource}\" },\n          \"editorMode\"\
+    : \"code\",\n          \"expr\": \"avg by (mode) (rate(node_cpu_seconds_total{instance=~\\\
+    \"$node\\\", mode!=\\\"idle\\\"}[$interval])) * 100\",\n          \"legendFormat\"\
+    : \"{{mode}}\",\n          \"range\": true,\n          \"refId\": \"A\"\n    \
+    \    }\n      ],\n      \"title\": \"Desglose de Modos de CPU (User, System, I/O\
+    \ Wait)\",\n      \"type\": \"timeseries\"\n    },\n    {\n      \"collapsed\"\
+    : false,\n      \"gridPos\": { \"h\": 1, \"w\": 24, \"x\": 0, \"y\": 6 },\n  \
+    \    \"id\": 200,\n      \"title\": \"\U0001F9E0 2. MEMORIA \u2014 Utilizaci\xF3\
+    n y Presi\xF3n\",\n      \"type\": \"row\"\n    },\n    {\n      \"datasource\"\
+    : { \"type\": \"prometheus\", \"uid\": \"${datasource}\" },\n      \"fieldConfig\"\
+    : {\n        \"defaults\": {\n          \"color\": { \"mode\": \"thresholds\"\
+    \ },\n          \"mappings\": [],\n          \"max\": 100,\n          \"min\"\
+    : 0,\n          \"thresholds\": {\n            \"mode\": \"absolute\",\n     \
+    \       \"steps\": [\n              { \"color\": \"green\", \"value\": null },\n\
+    \              { \"color\": \"yellow\", \"value\": 75 },\n              { \"color\"\
+    : \"red\", \"value\": 90 }\n            ]\n          },\n          \"unit\": \"\
+    percent\"\n        },\n        \"overrides\": []\n      },\n      \"gridPos\"\
+    : { \"h\": 5, \"w\": 6, \"x\": 0, \"y\": 7 },\n      \"id\": 4,\n      \"options\"\
+    : {\n        \"colorMode\": \"value\",\n        \"graphMode\": \"area\",\n   \
+    \     \"justifyMode\": \"auto\",\n        \"orientation\": \"auto\",\n       \
+    \ \"reduceOptions\": {\n          \"calcs\": [\"lastNotNull\"],\n          \"\
+    fields\": \"\",\n          \"values\": false\n        },\n        \"textMode\"\
+    : \"auto\"\n      },\n      \"pluginVersion\": \"10.4.0\",\n      \"targets\"\
+    : [\n        {\n          \"datasource\": { \"type\": \"prometheus\", \"uid\"\
+    : \"${datasource}\" },\n          \"editorMode\": \"code\",\n          \"expr\"\
+    : \"(1 - (node_memory_MemAvailable_bytes{instance=~\\\"$node\\\"} / node_memory_MemTotal_bytes{instance=~\\\
+    \"$node\\\"})) * 100\",\n          \"legendFormat\": \"{{instance}} Utilizaci\xF3\
+    n Memoria\",\n          \"range\": true,\n          \"refId\": \"A\"\n       \
+    \ }\n      ],\n      \"title\": \"Utilizaci\xF3n de Memoria (%)\",\n      \"type\"\
+    : \"stat\"\n    },\n    {\n      \"datasource\": { \"type\": \"prometheus\", \"\
+    uid\": \"${datasource}\" },\n      \"fieldConfig\": {\n        \"defaults\": {\n\
+    \          \"color\": { \"mode\": \"palette-classic\" },\n          \"custom\"\
+    : {\n            \"axisBorderShow\": false,\n            \"axisPlacement\": \"\
+    auto\",\n            \"fillOpacity\": 20,\n            \"lineWidth\": 2,\n   \
+    \         \"showPoints\": \"never\",\n            \"stacking\": { \"group\": \"\
+    A\", \"mode\": \"normal\" }\n          },\n          \"unit\": \"bytes\"\n   \
+    \     },\n        \"overrides\": []\n      },\n      \"gridPos\": { \"h\": 5,\
+    \ \"w\": 10, \"x\": 6, \"y\": 7 },\n      \"id\": 5,\n      \"options\": {\n \
+    \       \"legend\": { \"calcs\": [\"mean\", \"lastNotNull\"], \"displayMode\"\
+    : \"table\", \"placement\": \"bottom\", \"showLegend\": true },\n        \"tooltip\"\
+    : { \"mode\": \"multi\", \"sort\": \"desc\" }\n      },\n      \"pluginVersion\"\
+    : \"10.4.0\",\n      \"targets\": [\n        {\n          \"datasource\": { \"\
+    type\": \"prometheus\", \"uid\": \"${datasource}\" },\n          \"editorMode\"\
+    : \"code\",\n          \"expr\": \"node_memory_MemTotal_bytes{instance=~\\\"$node\\\
+    \"} - node_memory_MemAvailable_bytes{instance=~\\\"$node\\\"}\",\n          \"\
+    legendFormat\": \"Memoria Usada\",\n          \"range\": true,\n          \"refId\"\
+    : \"A\"\n        },\n        {\n          \"datasource\": { \"type\": \"prometheus\"\
+    , \"uid\": \"${datasource}\" },\n          \"editorMode\": \"code\",\n       \
+    \   \"expr\": \"node_memory_Cached_bytes{instance=~\\\"$node\\\"}\",\n       \
+    \   \"legendFormat\": \"En Cach\xE9\",\n          \"range\": true,\n         \
+    \ \"refId\": \"B\"\n        },\n        {\n          \"datasource\": { \"type\"\
+    : \"prometheus\", \"uid\": \"${datasource}\" },\n          \"editorMode\": \"\
+    code\",\n          \"expr\": \"node_memory_Buffers_bytes{instance=~\\\"$node\\\
+    \"}\",\n          \"legendFormat\": \"Buffers\",\n          \"range\": true,\n\
+    \          \"refId\": \"C\"\n        },\n        {\n          \"datasource\":\
+    \ { \"type\": \"prometheus\", \"uid\": \"${datasource}\" },\n          \"editorMode\"\
+    : \"code\",\n          \"expr\": \"node_memory_MemFree_bytes{instance=~\\\"$node\\\
+    \"}\",\n          \"legendFormat\": \"Memoria Libre\",\n          \"range\": true,\n\
+    \          \"refId\": \"D\"\n        }\n      ],\n      \"title\": \"Distribuci\xF3\
+    n de Memoria en el Nodo\",\n      \"type\": \"timeseries\"\n    },\n    {\n  \
+    \    \"datasource\": { \"type\": \"prometheus\", \"uid\": \"${datasource}\" },\n\
+    \      \"fieldConfig\": {\n        \"defaults\": {\n          \"color\": { \"\
+    mode\": \"palette-classic\" },\n          \"custom\": { \"fillOpacity\": 20, \"\
+    lineWidth\": 2, \"showPoints\": \"never\" },\n          \"unit\": \"ops\"\n  \
+    \      },\n        \"overrides\": []\n      },\n      \"gridPos\": { \"h\": 5,\
+    \ \"w\": 8, \"x\": 16, \"y\": 7 },\n      \"id\": 6,\n      \"options\": {\n \
+    \       \"legend\": { \"calcs\": [\"max\", \"lastNotNull\"], \"displayMode\":\
+    \ \"table\", \"placement\": \"bottom\", \"showLegend\": true },\n        \"tooltip\"\
+    : { \"mode\": \"multi\", \"sort\": \"desc\" }\n      },\n      \"pluginVersion\"\
+    : \"10.4.0\",\n      \"targets\": [\n        {\n          \"datasource\": { \"\
+    type\": \"prometheus\", \"uid\": \"${datasource}\" },\n          \"editorMode\"\
+    : \"code\",\n          \"expr\": \"rate(node_vmstat_pgmajfault{instance=~\\\"\
+    $node\\\"}[$interval])\",\n          \"legendFormat\": \"Major Page Faults/s (Saturaci\xF3\
+    n)\",\n          \"range\": true,\n          \"refId\": \"A\"\n        }\n   \
+    \   ],\n      \"title\": \"Saturaci\xF3n de Memoria (Major Page Faults)\",\n \
+    \     \"type\": \"timeseries\"\n    },\n    {\n      \"collapsed\": false,\n \
+    \     \"gridPos\": { \"h\": 1, \"w\": 24, \"x\": 0, \"y\": 12 },\n      \"id\"\
+    : 300,\n      \"title\": \"\U0001F4BE 3. ALMACENAMIENTO \u2014 Espacio y Desempe\xF1\
+    o I/O\",\n      \"type\": \"row\"\n    },\n    {\n      \"datasource\": { \"type\"\
+    : \"prometheus\", \"uid\": \"${datasource}\" },\n      \"fieldConfig\": {\n  \
+    \      \"defaults\": {\n          \"color\": { \"mode\": \"thresholds\" },\n \
+    \         \"mappings\": [],\n          \"max\": 100,\n          \"min\": 0,\n\
+    \          \"thresholds\": {\n            \"mode\": \"absolute\",\n          \
+    \  \"steps\": [\n              { \"color\": \"green\", \"value\": null },\n  \
+    \            { \"color\": \"yellow\", \"value\": 75 },\n              { \"color\"\
+    : \"red\", \"value\": 85 }\n            ]\n          },\n          \"unit\": \"\
+    percent\"\n        },\n        \"overrides\": []\n      },\n      \"gridPos\"\
+    : { \"h\": 5, \"w\": 6, \"x\": 0, \"y\": 13 },\n      \"id\": 7,\n      \"options\"\
+    : {\n        \"colorMode\": \"value\",\n        \"graphMode\": \"area\",\n   \
+    \     \"justifyMode\": \"auto\",\n        \"orientation\": \"auto\",\n       \
+    \ \"reduceOptions\": {\n          \"calcs\": [\"lastNotNull\"],\n          \"\
+    fields\": \"\",\n          \"values\": false\n        },\n        \"textMode\"\
+    : \"auto\"\n      },\n      \"pluginVersion\": \"10.4.0\",\n      \"targets\"\
+    : [\n        {\n          \"datasource\": { \"type\": \"prometheus\", \"uid\"\
+    : \"${datasource}\" },\n          \"editorMode\": \"code\",\n          \"expr\"\
+    : \"(1 - (node_filesystem_avail_bytes{mountpoint=\\\"/\\\", instance=~\\\"$node\\\
+    \"} / node_filesystem_size_bytes{mountpoint=\\\"/\\\", instance=~\\\"$node\\\"\
+    })) * 100\",\n          \"legendFormat\": \"Root Disk Utilizaci\xF3n\",\n    \
+    \      \"range\": true,\n          \"refId\": \"A\"\n        }\n      ],\n   \
+    \   \"title\": \"Espacio Usado en Disco Root (%)\",\n      \"type\": \"stat\"\n\
+    \    },\n    {\n      \"datasource\": { \"type\": \"prometheus\", \"uid\": \"\
+    ${datasource}\" },\n      \"fieldConfig\": {\n        \"defaults\": {\n      \
+    \    \"color\": { \"mode\": \"palette-classic\" },\n          \"custom\": { \"\
+    fillOpacity\": 15, \"lineWidth\": 2, \"showPoints\": \"never\" },\n          \"\
+    unit\": \"Bps\"\n        },\n        \"overrides\": []\n      },\n      \"gridPos\"\
+    : { \"h\": 5, \"w\": 10, \"x\": 6, \"y\": 13 },\n      \"id\": 8,\n      \"options\"\
+    : {\n        \"legend\": { \"calcs\": [\"mean\", \"max\", \"lastNotNull\"], \"\
+    displayMode\": \"table\", \"placement\": \"bottom\", \"showLegend\": true },\n\
+    \        \"tooltip\": { \"mode\": \"multi\", \"sort\": \"desc\" }\n      },\n\
+    \      \"pluginVersion\": \"10.4.0\",\n      \"targets\": [\n        {\n     \
+    \     \"datasource\": { \"type\": \"prometheus\", \"uid\": \"${datasource}\" },\n\
+    \          \"editorMode\": \"code\",\n          \"expr\": \"rate(node_disk_read_bytes_total{instance=~\\\
+    \"$node\\\"}[$interval])\",\n          \"legendFormat\": \"Lectura bytes/s\",\n\
+    \          \"range\": true,\n          \"refId\": \"A\"\n        },\n        {\n\
+    \          \"datasource\": { \"type\": \"prometheus\", \"uid\": \"${datasource}\"\
+    \ },\n          \"editorMode\": \"code\",\n          \"expr\": \"rate(node_disk_written_bytes_total{instance=~\\\
+    \"$node\\\"}[$interval])\",\n          \"legendFormat\": \"Escritura bytes/s\"\
+    ,\n          \"range\": true,\n          \"refId\": \"B\"\n        }\n      ],\n\
+    \      \"title\": \"Rendimiento I/O de Disco (Throughput)\",\n      \"type\":\
+    \ \"timeseries\"\n    },\n    {\n      \"datasource\": { \"type\": \"prometheus\"\
+    , \"uid\": \"${datasource}\" },\n      \"fieldConfig\": {\n        \"defaults\"\
+    : {\n          \"color\": { \"mode\": \"thresholds\" },\n          \"custom\"\
+    : { \"fillOpacity\": 20, \"lineWidth\": 2, \"showPoints\": \"never\" },\n    \
+    \      \"thresholds\": {\n            \"mode\": \"absolute\",\n            \"\
+    steps\": [\n              { \"color\": \"green\", \"value\": null },\n       \
+    \       { \"color\": \"yellow\", \"value\": 0.05 },\n              { \"color\"\
+    : \"red\", \"value\": 0.2 }\n            ]\n          },\n          \"unit\":\
+    \ \"s\"\n        },\n        \"overrides\": []\n      },\n      \"gridPos\": {\
+    \ \"h\": 5, \"w\": 8, \"x\": 16, \"y\": 13 },\n      \"id\": 9,\n      \"options\"\
+    : {\n        \"legend\": { \"calcs\": [\"max\", \"lastNotNull\"], \"displayMode\"\
+    : \"table\", \"placement\": \"bottom\", \"showLegend\": true },\n        \"tooltip\"\
+    : { \"mode\": \"multi\", \"sort\": \"desc\" }\n      },\n      \"pluginVersion\"\
+    : \"10.4.0\",\n      \"targets\": [\n        {\n          \"datasource\": { \"\
+    type\": \"prometheus\", \"uid\": \"${datasource}\" },\n          \"editorMode\"\
+    : \"code\",\n          \"expr\": \"rate(node_disk_io_time_seconds_total{instance=~\\\
+    \"$node\\\"}[$interval])\",\n          \"legendFormat\": \"I/O Saturation Time\"\
+    ,\n          \"range\": true,\n          \"refId\": \"A\"\n        }\n      ],\n\
+    \      \"title\": \"Saturaci\xF3n de I/O de Disco (Cola/Espera)\",\n      \"type\"\
+    : \"timeseries\"\n    },\n    {\n      \"collapsed\": false,\n      \"gridPos\"\
+    : { \"h\": 1, \"w\": 24, \"x\": 0, \"y\": 18 },\n      \"id\": 400,\n      \"\
+    title\": \"\U0001F310 4. RED \u2014 Ancho de Banda, Paquetes Descartados y Errores\"\
+    ,\n      \"type\": \"row\"\n    },\n    {\n      \"datasource\": { \"type\": \"\
+    prometheus\", \"uid\": \"${datasource}\" },\n      \"fieldConfig\": {\n      \
+    \  \"defaults\": {\n          \"color\": { \"mode\": \"palette-classic\" },\n\
+    \          \"custom\": { \"fillOpacity\": 15, \"lineWidth\": 2, \"showPoints\"\
+    : \"never\" },\n          \"unit\": \"bps\"\n        },\n        \"overrides\"\
+    : []\n      },\n      \"gridPos\": { \"h\": 6, \"w\": 12, \"x\": 0, \"y\": 19\
+    \ },\n      \"id\": 10,\n      \"options\": {\n        \"legend\": { \"calcs\"\
+    : [\"mean\", \"max\", \"lastNotNull\"], \"displayMode\": \"table\", \"placement\"\
+    : \"bottom\", \"showLegend\": true },\n        \"tooltip\": { \"mode\": \"multi\"\
+    , \"sort\": \"desc\" }\n      },\n      \"pluginVersion\": \"10.4.0\",\n     \
+    \ \"targets\": [\n        {\n          \"datasource\": { \"type\": \"prometheus\"\
+    , \"uid\": \"${datasource}\" },\n          \"editorMode\": \"code\",\n       \
+    \   \"expr\": \"sum by (device) (rate(node_network_receive_bytes_total{instance=~\\\
+    \"$node\\\", device!~\\\"lo|veth.*|docker.*\\\"}[$interval])) * 8\",\n       \
+    \   \"legendFormat\": \"Recibido (Rx) {{device}}\",\n          \"range\": true,\n\
+    \          \"refId\": \"A\"\n        },\n        {\n          \"datasource\":\
+    \ { \"type\": \"prometheus\", \"uid\": \"${datasource}\" },\n          \"editorMode\"\
+    : \"code\",\n          \"expr\": \"sum by (device) (rate(node_network_transmit_bytes_total{instance=~\\\
+    \"$node\\\", device!~\\\"lo|veth.*|docker.*\\\"}[$interval])) * 8\",\n       \
+    \   \"legendFormat\": \"Transmitido (Tx) {{device}}\",\n          \"range\": true,\n\
+    \          \"refId\": \"B\"\n        }\n      ],\n      \"title\": \"Ancho de\
+    \ Banda de Red (Bits/s)\",\n      \"type\": \"timeseries\"\n    },\n    {\n  \
+    \    \"datasource\": { \"type\": \"prometheus\", \"uid\": \"${datasource}\" },\n\
+    \      \"fieldConfig\": {\n        \"defaults\": {\n          \"color\": { \"\
+    mode\": \"thresholds\" },\n          \"mappings\": [],\n          \"thresholds\"\
+    : {\n            \"mode\": \"absolute\",\n            \"steps\": [\n         \
+    \     { \"color\": \"green\", \"value\": null },\n              { \"color\": \"\
+    yellow\", \"value\": 1 },\n              { \"color\": \"red\", \"value\": 10 }\n\
+    \            ]\n          },\n          \"unit\": \"pps\"\n        },\n      \
+    \  \"overrides\": []\n      },\n      \"gridPos\": { \"h\": 6, \"w\": 6, \"x\"\
+    : 12, \"y\": 19 },\n      \"id\": 11,\n      \"options\": {\n        \"colorMode\"\
+    : \"value\",\n        \"graphMode\": \"area\",\n        \"justifyMode\": \"auto\"\
+    ,\n        \"orientation\": \"auto\",\n        \"reduceOptions\": {\n        \
+    \  \"calcs\": [\"lastNotNull\"],\n          \"fields\": \"\",\n          \"values\"\
+    : false\n        },\n        \"textMode\": \"auto\"\n      },\n      \"pluginVersion\"\
+    : \"10.4.0\",\n      \"targets\": [\n        {\n          \"datasource\": { \"\
+    type\": \"prometheus\", \"uid\": \"${datasource}\" },\n          \"editorMode\"\
+    : \"code\",\n          \"expr\": \"sum(rate(node_network_receive_drop_total{instance=~\\\
+    \"$node\\\"}[$interval])) + sum(rate(node_network_transmit_drop_total{instance=~\\\
+    \"$node\\\"}[$interval]))\",\n          \"legendFormat\": \"Drops/s\",\n     \
+    \     \"range\": true,\n          \"refId\": \"A\"\n        }\n      ],\n    \
+    \  \"title\": \"Paquetes Descartados (Network Drops)\",\n      \"type\": \"stat\"\
+    \n    },\n    {\n      \"datasource\": { \"type\": \"prometheus\", \"uid\": \"\
+    ${datasource}\" },\n      \"fieldConfig\": {\n        \"defaults\": {\n      \
+    \    \"color\": { \"mode\": \"thresholds\" },\n          \"mappings\": [],\n \
+    \         \"thresholds\": {\n            \"mode\": \"absolute\",\n           \
+    \ \"steps\": [\n              { \"color\": \"green\", \"value\": null },\n   \
+    \           { \"color\": \"yellow\", \"value\": 1 },\n              { \"color\"\
+    : \"red\", \"value\": 5 }\n            ]\n          },\n          \"unit\": \"\
+    pps\"\n        },\n        \"overrides\": []\n      },\n      \"gridPos\": { \"\
+    h\": 6, \"w\": 6, \"x\": 18, \"y\": 19 },\n      \"id\": 12,\n      \"options\"\
+    : {\n        \"colorMode\": \"value\",\n        \"graphMode\": \"area\",\n   \
+    \     \"justifyMode\": \"auto\",\n        \"orientation\": \"auto\",\n       \
+    \ \"reduceOptions\": {\n          \"calcs\": [\"lastNotNull\"],\n          \"\
+    fields\": \"\",\n          \"values\": false\n        },\n        \"textMode\"\
+    : \"auto\"\n      },\n      \"pluginVersion\": \"10.4.0\",\n      \"targets\"\
+    : [\n        {\n          \"datasource\": { \"type\": \"prometheus\", \"uid\"\
+    : \"${datasource}\" },\n          \"editorMode\": \"code\",\n          \"expr\"\
+    : \"sum(rate(node_network_receive_errs_total{instance=~\\\"$node\\\"}[$interval]))\
+    \ + sum(rate(node_network_transmit_errs_total{instance=~\\\"$node\\\"}[$interval]))\"\
+    ,\n          \"legendFormat\": \"Errores/s\",\n          \"range\": true,\n  \
+    \        \"refId\": \"A\"\n        }\n      ],\n      \"title\": \"Errores de\
+    \ Interfaz de Red\",\n      \"type\": \"stat\"\n    }\n  ],\n  \"refresh\": \"\
+    10s\",\n  \"schemaVersion\": 39,\n  \"tags\": [\"use\", \"infrastructure\", \"\
+    nodes\", \"sre\"],\n  \"templating\": {\n    \"list\": [\n      {\n        \"\
+    current\": { \"selected\": true, \"text\": \"prometheus\", \"value\": \"prometheus\"\
+    \ },\n        \"hide\": 0,\n        \"includeAll\": false,\n        \"label\"\
+    : \"Datasource\",\n        \"multi\": false,\n        \"name\": \"datasource\"\
+    ,\n        \"options\": [],\n        \"query\": \"prometheus\",\n        \"refresh\"\
+    : 1,\n        \"regex\": \"\",\n        \"type\": \"datasource\"\n      },\n \
+    \     {\n        \"allValue\": \".*\",\n        \"current\": { \"selected\": true,\
+    \ \"text\": \"All\", \"value\": \"$__all\" },\n        \"datasource\": { \"type\"\
+    : \"prometheus\", \"uid\": \"${datasource}\" },\n        \"definition\": \"label_values(node_uname_info,\
+    \ instance)\",\n        \"hide\": 0,\n        \"includeAll\": true,\n        \"\
+    label\": \"Nodo\",\n        \"multi\": true,\n        \"name\": \"node\",\n  \
+    \      \"options\": [],\n        \"query\": {\n          \"qryType\": 1,\n   \
+    \       \"query\": \"label_values(node_uname_info, instance)\",\n          \"\
+    refId\": \"PrometheusVariableQueryEditor-VariableQuery\"\n        },\n       \
+    \ \"refresh\": 2,\n        \"regex\": \"\",\n        \"sort\": 1,\n        \"\
+    type\": \"query\"\n      },\n      {\n        \"auto\": false,\n        \"auto_count\"\
+    : 30,\n        \"auto_min\": \"10s\",\n        \"current\": { \"selected\": true,\
+    \ \"text\": \"5m\", \"value\": \"5m\" },\n        \"hide\": 0,\n        \"label\"\
+    : \"Intervalo\",\n        \"name\": \"interval\",\n        \"options\": [\n  \
+    \        { \"selected\": false, \"text\": \"1m\", \"value\": \"1m\" },\n     \
+    \     { \"selected\": true, \"text\": \"5m\", \"value\": \"5m\" },\n         \
+    \ { \"selected\": false, \"text\": \"15m\", \"value\": \"15m\" },\n          {\
+    \ \"selected\": false, \"text\": \"1h\", \"value\": \"1h\" }\n        ],\n   \
+    \     \"query\": \"1m,5m,15m,1h\",\n        \"type\": \"interval\"\n      }\n\
+    \    ]\n  },\n  \"time\": { \"from\": \"now-1h\", \"to\": \"now\" },\n  \"timepicker\"\
+    : {\n    \"refresh_intervals\": [\"5s\", \"10s\", \"30s\", \"1m\", \"5m\"]\n \
+    \ },\n  \"timezone\": \"browser\",\n  \"title\": \"Kubernetes Cluster \u2014 Rendimiento\
+    \ de Nodos (M\xE9todo USE)\",\n  \"uid\": \"k8s-nodes-use\",\n  \"version\": 1\n\
+    }\n"
