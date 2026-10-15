@@ -4,14 +4,17 @@ kind: Kustomization
 namespace: online-boutique
 
 resources:
-  - ../../base
-  - namespace.yaml
+- ../../base
+- namespace.yaml
 
 patches:
-  - path: patches/dev-resources.yaml
-  - path: patches/tracing.yaml
+- path: patches/dev-resources.yaml
+- path: patches/tracing.yaml
 
 images:
-  - name: us-central1-docker.pkg.dev/online-boutique-ci/microservices-demo/frontend
-    newName: us-central1-docker.pkg.dev/online-boutique-ci/microservices-demo/frontend
-    newTag: v0.10.7
+- name: ghcr.io/miguelortiz13/online-boutique/frontend
+  newName: ghcr.io/miguelortiz13/online-boutique/frontend
+  newTag: sha-2406985
+- name: us-central1-docker.pkg.dev/online-boutique-ci/microservices-demo/frontend
+  newName: us-central1-docker.pkg.dev/online-boutique-ci/microservices-demo/frontend
+  newTag: v0.10.7
