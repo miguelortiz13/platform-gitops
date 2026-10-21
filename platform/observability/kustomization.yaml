@@ -3,7 +3,10 @@ kind: Kustomization
 
 resources:
   - external-secret-grafana.yaml
+  - external-secret-discord.yaml
   - loki-datasource.yaml
   - tempo-datasource.yaml
   - dashboard-services-red.yaml
   - dashboard-nodes-use.yaml
+  - prometheus-rules.yaml
+  - alertmanager-config.yaml

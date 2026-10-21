@@ -63,6 +63,11 @@ spec:
         alertmanager:
           alertmanagerSpec:
             retention: 24h
+            alertmanagerConfigSelector:
+              matchLabels:
+                release: kube-prometheus-stack
+            alertmanagerConfigMatcherStrategy:
+              type: None
             resources:
               requests:
                 cpu: 25m
