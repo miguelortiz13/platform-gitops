@@ -6,6 +6,7 @@
 
 ## 1. Secretos Administrados
 * **`external-secret-grafana.yaml`:** Sincroniza las credenciales de administración de Grafana (`grafana-admin-user`, `grafana-admin-password`) desde Azure Key Vault hacia el Kubernetes Secret `grafana-admin-credentials` en el namespace `monitoring`.
+* **`external-secret-discord.yaml`:** Sincroniza la URL del Webhook de Discord (`discord-webhook-url`) desde Azure Key Vault hacia el Kubernetes Secret `alertmanager-discord-webhook` (`webhook-url`) en el namespace `monitoring`.
 
 ---
 
@@ -24,3 +25,9 @@ Mediante la etiqueta `grafana_dashboard: "1"`, el sidecar de Grafana carga autom
 * **`dashboard-services-red.yaml`:** Tablero basado en el **Método RED** (Rate, Errors, Duration) para Online Boutique con selector dinámico de microservicio (`$service`).
 * **`dashboard-nodes-use.yaml`:** Tablero basado en el **Método USE** (Utilization, Saturation, Errors) para los nodos del clúster con selector dinámico (`$node`).
 * **Resiliencia:** Si Grafana es borrado o reiniciado, los tableros se reimportan de forma totalmente desatendida.
+
+---
+
+## 4. Reglas de Alerta SRE y Enrutamiento a Discord (P4-05)
+* **`prometheus-rules.yaml` (`PrometheusRule`):** Define reglas de alerta orientadas a síntomas (`FrontendHighErrorRate`, `FrontendHighLatencyP95`, `OnlineBoutiqueServiceUnavailable`) y a causas (`PodCrashLooping`, `PodNotReady`, `NodeMemoryPressure`, `NodeHighCPUUtilization`), cada una enriquecida con su respectiva anotación `runbook_url`.
+* **`alertmanager-config.yaml` (`AlertmanagerConfig`):** Configura agrupación (`groupBy`), inhibición (`critical` inhibe `warning`) y receptor nativo `discordConfigs` consumiendo el secreto `alertmanager-discord-webhook` con notificaciones de disparo (`FIRING`) y resolución (`RESOLVED`).
