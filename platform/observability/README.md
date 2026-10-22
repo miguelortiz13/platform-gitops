@@ -31,3 +31,10 @@ Mediante la etiqueta `grafana_dashboard: "1"`, el sidecar de Grafana carga autom
 ## 4. Reglas de Alerta SRE y Enrutamiento a Discord (P4-05)
 * **`prometheus-rules.yaml` (`PrometheusRule`):** Define reglas de alerta orientadas a síntomas (`FrontendHighErrorRate`, `FrontendHighLatencyP95`, `OnlineBoutiqueServiceUnavailable`) y a causas (`PodCrashLooping`, `PodNotReady`, `NodeMemoryPressure`, `NodeHighCPUUtilization`), cada una enriquecida con su respectiva anotación `runbook_url`.
 * **`alertmanager-config.yaml` (`AlertmanagerConfig`):** Configura agrupación (`groupBy`), inhibición (`critical` inhibe `warning`) y receptor nativo `discordConfigs` consumiendo el secreto `alertmanager-discord-webhook` con notificaciones de disparo (`FIRING`) y resolución (`RESOLVED`).
+
+---
+
+## 5. Correlación Métricas ➔ Trazas ➔ Logs (P4-06)
+* **Prometheus Exemplars (`app-kube-prometheus-stack.yaml`):** Se habilita `enableFeatures: [exemplar-storage]` y `exemplarTraceIdDestinations` (`datasourceUid: tempo`, `traceIdLabelName: trace_id`) en el sidecar de datasources de Grafana.
+* **OpenTelemetry Spanmetrics (`app-opentelemetry-collector.yaml`):** El conector `spanmetrics` con `exemplars.enabled: true` y `enable_open_metrics: true` genera histogramas de latencia con `trace_id` directamente desde los spans OTLP.
+* **Dashboard RED (`dashboard-services-red.yaml`):** El panel de latencia HTTP activa `"exemplar": true` y Data Links hacia Grafana Tempo y Grafana Loki.
