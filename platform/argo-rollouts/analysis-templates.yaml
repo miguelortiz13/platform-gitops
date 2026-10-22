@@ -9,16 +9,29 @@ spec:
       value: frontend
   metrics:
     - name: success-rate
-      interval: 30s
-      successCondition: result[0] >= 0.95
-      failureLimit: 3
+      interval: 20s
+      count: 5
+      successCondition: len(result) == 0 || result[0] >= 0.99
+      failureLimit: 2
       provider:
         prometheus:
-          address: http://kube-prometheus-stack-prometheus.monitoring.svc:9090
+          address: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
           query: |
-            sum(rate(http_requests_total{service="{{args.service-name}}", status!~"5.*"}[1m]))
+            (
+              sum(rate(http_requests_total{service="{{args.service-name}}", status!~"5.*"}[1m]))
+              or
+              sum(rate(http_server_request_duration_seconds_count{service="{{args.service-name}}", http_status_code!~"5.*"}[1m]))
+              or
+              sum(rate(app_requests_total{service="{{args.service-name}}", status!~"5.*"}[1m]))
+            )
             /
-            sum(rate(http_requests_total{service="{{args.service-name}}"}[1m]))
+            (
+              sum(rate(http_requests_total{service="{{args.service-name}}"}[1m]))
+              or
+              sum(rate(http_server_request_duration_seconds_count{service="{{args.service-name}}"}[1m]))
+              or
+              sum(rate(app_requests_total{service="{{args.service-name}}"}[1m]))
+            )
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
@@ -31,11 +44,16 @@ spec:
       value: frontend
   metrics:
     - name: latency-p99
-      interval: 30s
-      successCondition: result[0] <= 0.500
-      failureLimit: 3
+      interval: 20s
+      count: 5
+      successCondition: len(result) == 0 || result[0] <= 0.500
+      failureLimit: 2
       provider:
         prometheus:
-          address: http://kube-prometheus-stack-prometheus.monitoring.svc:9090
+          address: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
           query: |
-            histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{service="{{args.service-name}}"}[1m])) by (le))
+            histogram_quantile(0.99,
+              sum(rate(http_request_duration_seconds_bucket{service="{{args.service-name}}"}[1m])) by (le)
+              or
+              sum(rate(http_server_request_duration_seconds_bucket{service="{{args.service-name}}"}[1m])) by (le)
+            )
