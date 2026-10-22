@@ -39,14 +39,15 @@ Para permitir monitoreo diferenciado y routing granular, se definen dos servicio
 
 ---
 
-## 3. AnalysisTemplates (Preparación para P4-07)
+## 3. AnalysisTemplates y Rollback Automático con Prometheus (P4-07)
 
-Los recursos `AnalysisTemplate` definidos en `platform/argo-rollouts/analysis-templates.yaml` automatizan la decisión de promover o abortar el despliegue basándose en SLOs de SRE:
+Los recursos `AnalysisTemplate` definidos en [`analysis-templates.yaml`](analysis-templates.yaml) automatizan la decisión de promover o abortar el despliegue basándose en SLOs de SRE consultados directamente desde **Prometheus**:
 
-* **`frontend-success-rate`:** Requiere una tasa de éxito HTTP $\ge 95\%$ (`sum(rate(http_requests_total{... status!~"5.*"}[1m])) / sum(...)`).
+* **`frontend-success-rate`:** Requiere una tasa de éxito HTTP $\ge 99.0\%$ (`result[0] >= 0.99`). Con `failureLimit: 2` y `interval: 20s`, aborta inmediatamente ante degradación de errores 5xx sostenida.
 * **`frontend-latency`:** Requiere que la latencia percentil 99 ($P_{99}$) sea $\le 500\text{ms}$.
-
-*(La conexión en tiempo real contra la instancia de Prometheus en el clúster se activa en la tarea P4-07).*
+* **Demostración y Script de Simulación:**
+  - Guía detallada: [`docs/canary-analysis.md`](docs/canary-analysis.md)
+  - Script interactivo de prueba de rollback: [`scripts/simulate-canary-rollback.sh`](scripts/simulate-canary-rollback.sh)
 
 ---
 

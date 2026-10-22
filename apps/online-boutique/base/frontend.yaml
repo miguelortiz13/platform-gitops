@@ -24,13 +24,31 @@ spec:
     canary:
       stableService: frontend
       canaryService: frontend-canary
+      analysis:
+        templates:
+          - templateName: frontend-success-rate
+        args:
+          - name: service-name
+            value: frontend
       steps:
         - setWeight: 10
         - pause:
             duration: 1m
+        - analysis:
+            templates:
+              - templateName: frontend-success-rate
+            args:
+              - name: service-name
+                value: frontend
         - setWeight: 50
         - pause:
             duration: 2m
+        - analysis:
+            templates:
+              - templateName: frontend-success-rate
+            args:
+              - name: service-name
+                value: frontend
         - setWeight: 100
   selector:
     matchLabels:
